@@ -4,6 +4,10 @@ namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * Bitácora genérica, guarda el estado anterior/nuevo de
+ * cualquier modelo que use el trait RegistraBitacora.
+ */
 class Bitacora extends Model
 {
     protected $connection = 'mongodb';

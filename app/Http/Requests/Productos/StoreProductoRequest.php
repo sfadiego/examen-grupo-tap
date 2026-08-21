@@ -15,6 +15,7 @@ class StoreProductoRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:255',  'unique:mongodb.producto,nombre'],
+            // Máximo 3 dígitos enteros, hasta 2 decimales opcionales.
             'precio' => ['required', 'numeric', 'regex:/^\d{1,3}(\.\d{1,2})?$/'],
             'marca' => ['required', 'string', 'max:255'],
         ];

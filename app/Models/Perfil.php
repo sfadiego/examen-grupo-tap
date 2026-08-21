@@ -2,13 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GeneraCodigo;
 use App\Models\Concerns\RegistraBitacora;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * Rol de acceso. Agrupa varias secciones y se asigna a uno o más usuarios.
+ */
 class Perfil extends Model
 {
+    use GeneraCodigo;
     use RegistraBitacora;
+
+    public const PREFIJO_CODIGO = 'PERF';
 
     protected $connection = 'mongodb';
     protected $table = 'perfil';
@@ -27,18 +34,5 @@ class Perfil extends Model
     public function secciones(): BelongsToMany
     {
         return $this->belongsToMany(Seccion::class, 'perfil_seccion', 'perfil_id', 'seccion_id');
-    }
-
-    public static function generarCodigo(): string
-    {
-        $last = static::orderByDesc('created_at')->orderByDesc('_id')->first();
-
-        $next = 1;
-
-        if ($last && preg_match('/(\d+)$/', $last->codigo, $matches)) {
-            $next = (int) $matches[1] + 1;
-        }
-
-        return 'PERF-' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 }

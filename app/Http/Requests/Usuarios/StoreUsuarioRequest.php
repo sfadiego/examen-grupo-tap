@@ -17,6 +17,7 @@ class StoreUsuarioRequest extends FormRequest
             'usuario' => ['required', 'email', 'max:255', 'unique:mongodb.usuario,usuario'],
             'nombre' => ['required', 'string', 'max:255'],
             'foto' => ['required', 'image', 'max:2048'],
+            // Formato E.164: + seguido de 8 a 15 dígitos, sin espacios.
             'telefono' => ['nullable', 'string', 'max:20', 'regex:/^\+\d{8,15}$/'],
         ];
     }

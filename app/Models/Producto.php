@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GeneraCodigo;
 use App\Models\Concerns\RegistraBitacora;
 use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * Modelo para un producto
+ */
 class Producto extends Model
 {
+    use GeneraCodigo;
     use RegistraBitacora;
+
+    public const PREFIJO_CODIGO = 'PROD';
 
     protected $connection = 'mongodb';
     protected $table = 'producto';
@@ -21,20 +28,11 @@ class Producto extends Model
         'updated_at'
     ];
 
+    /**
+     * El precio se castea a decimal:2 porque Mongo exige bsonType "decimal" (Decimal128);
+     * un float/double normal rompe la validación del schema.
+     */
     protected $casts = [
         'precio' => 'decimal:2',
     ];
-
-    public static function generarCodigo(): string
-    {
-        $last = static::orderByDesc('created_at')->orderByDesc('_id')->first();
-
-        $next = 1;
-
-        if ($last && preg_match('/(\d+)$/', $last->codigo, $matches)) {
-            $next = (int) $matches[1] + 1;
-        }
-
-        return 'PROD-' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
-    }
 }

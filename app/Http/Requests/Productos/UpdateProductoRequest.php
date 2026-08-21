@@ -22,6 +22,7 @@ class UpdateProductoRequest extends FormRequest
                 'max:255',
                 Rule::unique('mongodb.producto', 'nombre')->ignore($this->route('producto'), '_id'),
             ],
+            // Máximo 3 dígitos enteros, hasta 2 decimales opcionales.
             'precio' => ['sometimes', 'required', 'numeric', 'regex:/^\d{1,3}(\.\d{1,2})?$/'],
             'marca' => ['sometimes', 'required', 'string', 'max:255'],
         ];

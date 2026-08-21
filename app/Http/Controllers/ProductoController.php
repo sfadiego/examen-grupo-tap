@@ -11,6 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CRUD de productos, incluyendo exportación a PDF y Excel.
+ */
 class ProductoController extends Controller
 {
     public function index(): JsonResponse

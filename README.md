@@ -62,6 +62,13 @@ composer require maatwebsite/excel
 
 Documentación de `maatwebsite/excel`: [https://docs.laravel-excel.com/4.x/exports/](https://docs.laravel-excel.com/4.x/exports/)
 
+
+### Documentacion Postman
+
+Documentación generada en postman : [https://documenter.getpostman.com/view/1266324/2sBYArVsiP#752f900d-d85f-4001-9cec-c15e08f11d8c](https://documenter.getpostman.com/view/1266324/2sBYArVsiP#752f900d-d85f-4001-9cec-c15e08f11d8c)
+
+
+
 ## Preguntas / Aclaraciones del examen
 
 - Se entendió que un **Perfil** es similar a un **rol**, por eso se declararon de esa manera, y una **Seccion** es el permiso/pantalla

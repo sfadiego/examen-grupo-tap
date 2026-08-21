@@ -24,7 +24,8 @@ class UpdateUsuarioRequest extends FormRequest
             ],
             'nombre' => ['sometimes', 'required', 'string', 'max:255'],
             'foto' => ['sometimes', 'nullable', 'image', 'max:2048'],
-            'telefono' => ['sometimes', 'nullable', 'string', 'max:20',  'regex:/^\+\d{8,15}$/'],
+            // Formato E.164: + seguido de 8 a 15 dígitos, sin espacios.
+            'telefono' => ['sometimes', 'nullable', 'string', 'max:20', 'regex:/^\+\d{8,15}$/'],
         ];
     }
 

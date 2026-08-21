@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CRUD de usuarios (con subida de foto) y asignación de perfiles.
+ */
 class UsuarioController extends Controller
 {
     public function index(): JsonResponse

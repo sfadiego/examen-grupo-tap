@@ -12,6 +12,9 @@ use Illuminate\Http\JsonResponse;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * CRUD de perfiles (roles) y asignación de secciones.
+ */
 class PerfilController extends Controller
 {
     public function index(): JsonResponse

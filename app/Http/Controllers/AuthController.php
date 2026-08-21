@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Login, logout y datos del usuario autenticado (Sanctum).
+ */
 class AuthController extends Controller
 {
     public function login(LoginRequest $request)

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GeneraCodigo;
 use App\Models\Concerns\RegistraBitacora;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -11,12 +12,19 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * Representa a un usuario con acceso al sistema. El campo `usuario`
+ * es su correo electrónico, usado también para el login vía Sanctum.
+ */
 class Usuario extends Model implements AuthenticatableContract
 {
     use Authenticatable;
+    use GeneraCodigo;
     use HasApiTokens;
     use HasFactory;
     use RegistraBitacora;
+
+    public const PREFIJO_CODIGO = 'USR';
 
     protected $connection = 'mongodb';
     protected $table = 'usuario';
@@ -39,6 +47,7 @@ class Usuario extends Model implements AuthenticatableContract
         'foto_url',
     ];
 
+    // Solo se guarda la ruta relativa de la foto; la URL pública se calcula aquí.
     public function getFotoUrlAttribute(): ?string
     {
         return $this->foto ? Storage::url($this->foto) : null;
@@ -54,22 +63,5 @@ class Usuario extends Model implements AuthenticatableContract
     public function perfiles(): BelongsToMany
     {
         return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'usuario_id', 'perfil_id');
-    }
-
-
-    public static function generarCodigo(): string
-    {
-        // ultimo registro creado, fecha y por id
-        $last = static::orderByDesc('created_at')
-            ->orderByDesc('_id')
-            ->first();
-
-        $next = 1;
-
-        if ($last && preg_match('/(\d+)$/', $last->codigo, $matches)) {
-            $next = (int) $matches[1] + 1;
-        }
-
-        return 'USR-' . str_pad((string) $next, 4, '0', STR_PAD_LEFT);
     }
 }

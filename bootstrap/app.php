@@ -16,15 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Midleware ForceJsonResponse verifica que la cabecera Accept: application/json esté presente en todas las rutas de la API.
         $middleware->api(prepend: [
             ForceJsonResponse::class,
         ]);
 
+        // Midleware VerificaAcceso verifica que el usuario autenticado tenga acceso a la sección indicada en la ruta.
         $middleware->alias([
             'acceso' => VerificaAcceso::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
+        // Validamos que la ruta comience con api/ para no afectar el manejo de errores de las rutas web.
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')) {
                 return response()->json([
