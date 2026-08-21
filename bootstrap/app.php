@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\ForceJsonResponse;
+use App\Http\Middleware\VerificaAcceso;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
             ForceJsonResponse::class,
+        ]);
+
+        $middleware->alias([
+            'acceso' => VerificaAcceso::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

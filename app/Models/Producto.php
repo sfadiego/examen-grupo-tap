@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RegistraBitacora;
 use MongoDB\Laravel\Eloquent\Model;
 
 class Producto extends Model
 {
+    use RegistraBitacora;
+
     protected $connection = 'mongodb';
     protected $table = 'producto';
 

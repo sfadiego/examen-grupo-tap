@@ -91,7 +91,7 @@ db.createCollection("bitacora", {
         modelo_id: { bsonType: "objectId" },
         datos_anteriores: { bsonType: "object" },
         datos_nuevos: { bsonType: "object" },
-        usuario_id: { bsonType: "objectId" },
+        usuario_id: { bsonType: ["objectId", "null"] },
         created_at: { bsonType: "date" }
       }
     }

@@ -17,7 +17,7 @@ class ProductosExport implements FromCollection, WithHeadings, WithMapping
 
     public function headings(): array
     {
-        return ['Código', 'Nombre', 'Marca', 'Precio', 'Fecha de creación'];
+        return ['Código', 'Nombre', 'Precio', 'Fecha de creación'];
     }
 
     public function map($producto): array
@@ -25,7 +25,6 @@ class ProductosExport implements FromCollection, WithHeadings, WithMapping
         return [
             $producto->codigo,
             $producto->nombre,
-            $producto->marca,
             $producto->precio,
             $producto->created_at->format('d/m/Y H:i'),
         ];

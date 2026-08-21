@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RegistraBitacora;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,7 @@ class Usuario extends Model implements AuthenticatableContract
     use Authenticatable;
     use HasApiTokens;
     use HasFactory;
+    use RegistraBitacora;
 
     protected $connection = 'mongodb';
     protected $table = 'usuario';
@@ -47,11 +49,6 @@ class Usuario extends Model implements AuthenticatableContract
         return [
             'password' => 'hashed',
         ];
-    }
-
-    public function getAuthIdentifierName(): string
-    {
-        return 'usuario';
     }
 
     public function perfiles(): BelongsToMany

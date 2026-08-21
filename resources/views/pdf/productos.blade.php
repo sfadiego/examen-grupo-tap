@@ -17,7 +17,6 @@
             <tr>
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Marca</th>
                 <th>Precio</th>
                 <th>Fecha de creación</th>
             </tr>
@@ -27,7 +26,6 @@
                 <tr>
                     <td>{{ $producto->codigo }}</td>
                     <td>{{ $producto->nombre }}</td>
-                    <td>{{ $producto->marca }}</td>
                     <td>{{ $producto->precio }}</td>
                     <td>{{ $producto->created_at->format('d/m/Y H:i') }}</td>
                 </tr>

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RegistraBitacora;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use MongoDB\Laravel\Eloquent\Model;
 
 class Perfil extends Model
 {
+    use RegistraBitacora;
+
     protected $connection = 'mongodb';
     protected $table = 'perfil';
 
