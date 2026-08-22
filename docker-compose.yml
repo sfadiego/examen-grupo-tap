@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mongo-tap
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-tap-data:/data/db
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    restart: unless-stopped
+
+volumes:
+  mongo-tap-data:
+    external: true
