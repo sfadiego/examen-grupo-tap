@@ -7,7 +7,7 @@ use App\Http\Requests\Auth\RecuperarPasswordRequest;
 use App\Mail\CredencialesRecuperadas;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -19,20 +19,21 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request)
     {
-        $credentials = $request->validated();
+        $usuario = Usuario::where('usuario', $request->usuario)->first();
 
-        if (! Auth::attempt($credentials)) {
+        // No usamos Auth::attempt() porque autentica contra el guard de sesión
+        // 'web', creando una sesión real innecesaria para una API basada en
+        // tokens (y que además rompe la revocación del token en logout()).
+        if (! $usuario || ! Hash::check($request->password, $usuario->password)) {
             throw ValidationException::withMessages([
                 'usuario' => ['Las credenciales no son correctas.'],
             ]);
         }
 
-        /** @var Usuario $user */
-        $user = Auth::user();
-        $token = $user->createToken('api-token')->plainTextToken;
+        $token = $usuario->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'usuario' => $user,
+            'usuario' => $usuario,
             'token' => $token,
         ]);
     }

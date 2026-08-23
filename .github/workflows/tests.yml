@@ -1,0 +1,58 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mongodb
+          coverage: none
+
+      - name: Instalar dependencias de Composer
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Preparar environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Preparar DB SQLite para Sanctum
+        run: |
+          touch database/testing.sqlite
+          php artisan migrate --database=sqlite --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/testing.sqlite
+
+      - name: Instalar mongosh
+        run: |
+          wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+
+      - name: Crear esquema de MongoDB (dev y testing)
+        run: mongosh --quiet database/mongo-db/schema.mongodb.js
+
+      - name: correr Pint para verificar el estilo de código
+        run: ./vendor/bin/pint --test
+
+      - name: Ejecutar pruebas
+        run: php artisan test
