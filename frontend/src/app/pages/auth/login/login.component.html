@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  <div>
+    <label for="usuario" class="mb-1 block text-sm font-medium text-slate-700">
+      Usuario
+    </label>
+    <input id="usuario" type="email" formControlName="usuario" autocomplete="username"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none" />
+    @if (form.controls.usuario.invalid && form.controls.usuario.touched) {
+    <p class="mt-1 text-xs text-red-600">Ingresa un correo válido.</p>
+    }
+  </div>
+
+  <div>
+    <label for="password" class="mb-1 block text-sm font-medium text-slate-700">
+      Contraseña
+    </label>
+    <input id="password" type="password" formControlName="password" autocomplete="current-password"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none" />
+    @if (form.controls.password.invalid && form.controls.password.touched) {
+    <p class="mt-1 text-xs text-red-600">La contraseña es obligatoria.</p>
+    }
+  </div>
+
+  <button type="submit"
+    class="mt-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700">
+    Iniciar sesión
+  </button>
+
+  <a routerLink="/password-recovery" class="mt-2 text-center text-sm text-slate-600 transition hover:text-slate-800">
+    ¿Olvidaste tu contraseña?
+  </a>
+</form>
