@@ -94,6 +94,12 @@ db.seccion.deleteMany({});
 db.bitacora.deleteMany({});
 ```
 
+## Frontend
+para correr el frontend ncesiamos correr el comando
+```
+ng serve 
+```
+y acceder a la url:  http://localhost:4200/
 
 
 ## Preguntas / Aclaraciones del examen
