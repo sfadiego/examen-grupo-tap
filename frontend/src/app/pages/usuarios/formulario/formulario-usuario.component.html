@@ -1,0 +1,64 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (usuario) {
+  <div>
+    <span class="mb-1 block text-sm font-medium text-slate-700">Código</span>
+    <p class="text-sm text-slate-500">{{ usuario.codigo }}</p>
+  </div>
+  }
+
+  <div>
+    <label for="nombre" class="mb-1 block text-sm font-medium text-slate-700">Nombre <span
+        class="text-red-600">*</span></label>
+    <input id="nombre" type="text" formControlName="nombre"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none" />
+    @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
+    <p class="mt-1 text-xs text-red-600">El nombre es requerido.</p>
+    }
+  </div>
+
+  <div>
+    <label for="usuario" class="mb-1 block text-sm font-medium text-slate-700">Usuario <span
+        class="text-red-600">*</span></label>
+    <input id="usuario" type="email" formControlName="usuario" autocomplete="email"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none" />
+    @if (form.controls.usuario.invalid && form.controls.usuario.touched) {
+    <p class="mt-1 text-xs text-red-600">Ingresa un correo válido.</p>
+    }
+  </div>
+
+  <div>
+    <label for="telefono" class="mb-1 block text-sm font-medium text-slate-700">Teléfono </label>
+    <input id="telefono" type="text" formControlName="telefono" placeholder="+523141234567"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none" />
+    @if (form.controls.telefono.invalid && form.controls.telefono.touched) {
+    <p class="mt-1 text-xs text-red-600">Debe incluir el código de país, ej: +523141234567.</p>
+    }
+  </div>
+
+  <div>
+    <label for="foto" class="mb-1 block text-sm font-medium text-slate-700">
+      Foto de perfil @if (!usuario) { <span class="text-red-600">*</span> }
+    </label>
+    <input id="foto" type="file" accept="image/*" (change)="onFotoChange($event)"
+      class="w-full text-sm text-slate-700" />
+
+    @if (errorFoto) {
+    <p class="mt-1 text-xs text-red-600">{{ errorFoto }}</p>
+    }
+  </div>
+
+  @if (error) {
+  <p class="text-sm text-red-600">{{ error }}</p>
+  }
+
+  <div class="mt-2 flex justify-end gap-3">
+    <button type="button" (click)="cancelar.emit()"
+      class="rounded-md px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100">
+      Cancelar
+    </button>
+    <button type="submit" [disabled]="cargando"
+      class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-60">
+      {{ cargando ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+</form>

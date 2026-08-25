@@ -1,0 +1,24 @@
+@if (producto; as producto) {
+<dl class="space-y-3 text-sm">
+    <div class="flex justify-between">
+        <dt class="text-slate-500">Código</dt>
+        <dd class="font-medium text-slate-800">{{ producto.codigo }}</dd>
+    </div>
+    <div class="flex justify-between">
+        <dt class="text-slate-500">Nombre</dt>
+        <dd class="font-medium text-slate-800">{{ producto.nombre }}</dd>
+    </div>
+    <div class="flex justify-between">
+        <dt class="text-slate-500">Marca</dt>
+        <dd class="font-medium text-slate-800">{{ producto.marca }}</dd>
+    </div>
+    <div class="flex justify-between">
+        <dt class="text-slate-500">Precio</dt>
+        <dd class="font-medium text-slate-800">{{ producto.precio | number: '1.0-2' }}</dd>
+    </div>
+    <div class="flex justify-between">
+        <dt class="text-slate-500">Fecha de creación</dt>
+        <dd class="font-medium text-slate-800">{{ producto.created_at | date: 'dd/MM/yyyy HH:mm' }}</dd>
+    </div>
+</dl>
+}

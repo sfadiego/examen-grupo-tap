@@ -1,0 +1,25 @@
+@if (abierto) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+    (click)="onBackdropClick()"
+  >
+    <div
+      class="w-full max-w-md rounded-xl bg-white p-6 shadow-lg"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-slate-800">{{ titulo }}</h2>
+        <button
+          type="button"
+          (click)="cerrar.emit()"
+          class="text-slate-400 transition hover:text-slate-600"
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+      </div>
+
+      <ng-content></ng-content>
+    </div>
+  </div>
+}

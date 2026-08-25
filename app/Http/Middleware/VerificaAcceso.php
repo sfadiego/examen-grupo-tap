@@ -20,13 +20,7 @@ class VerificaAcceso
             return response()->json(['message' => 'No autenticado.'], 401);
         }
 
-        // Verdadero si al menos uno de los perfiles del usuario incluye la sección requerida.
-        $tieneAcceso = $usuario->load('perfiles.secciones')
-            ->perfiles
-            ->flatMap(fn ($perfil) => $perfil->secciones)
-            ->contains('nombre', $seccion);
-
-        if (! $tieneAcceso) {
+        if (! $usuario->tieneAcceso($seccion)) {
             return response()->json(['message' => 'No tiene acceso a esta sección.'], 403);
         }
 

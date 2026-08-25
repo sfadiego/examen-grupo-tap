@@ -1,0 +1,84 @@
+<div class="p-6">
+  <div class="mb-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-slate-800">Usuarios</h1>
+    <div class="flex items-center gap-2">
+      <button (click)="descargarPdf()" [disabled]="!!descargando()"
+        class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+        {{ descargando() === 'pdf' ? 'Descargando...' : 'Descargar PDF' }}
+      </button>
+      <button (click)="descargarExcel()" [disabled]="!!descargando()"
+        class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+        {{ descargando() === 'excel' ? 'Descargando...' : 'Descargar Excel' }}
+      </button>
+      <button (click)="nuevoUsuario()"
+        class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700">
+        Nuevo usuario
+      </button>
+    </div>
+  </div>
+
+  @if (errorAccion()) {
+  <p class="mb-4 text-sm text-red-600">{{ errorAccion() }}</p>
+  }
+
+  @if (cargando()) {
+  <p class="text-sm text-slate-500">Cargando usuarios...</p>
+  } @else if (error()) {
+  <p class="text-sm text-red-600">{{ error() }}</p>
+  } @else if (usuarios().length === 0) {
+  <p class="text-sm text-slate-500">No hay usuarios registrados.</p>
+  } @else {
+  <div class="overflow-x-auto rounded-lg border border-slate-200">
+    <table class="min-w-full divide-y divide-slate-200 text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Código de usuario</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Usuario</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Nombre</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Fecha de creación</th>
+          <th class="px-4 py-2 text-right font-medium text-slate-600">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (usuario of usuarios(); track usuario.id) {
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-2 text-slate-700">{{ usuario.codigo }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ usuario.usuario }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ usuario.nombre }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ usuario.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td class="px-4 py-2 text-right">
+            <button type="button" (click)="editar(usuario)" class="mr-3 text-blue-600 transition hover:text-blue-800">
+              Editar
+            </button>
+            <button type="button" (click)="visualizar(usuario)"
+              class="mr-3 text-slate-500 transition hover:text-slate-700">
+              Ver
+            </button>
+            <button type="button" (click)="eliminar(usuario)" [disabled]="eliminandoId() === usuario.id"
+              class="text-red-600 transition hover:text-red-800 disabled:opacity-60">
+              {{ eliminandoId() === usuario.id ? 'Eliminando...' : 'Eliminar' }}
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <app-modal [abierto]="detalleAbierto()" titulo="Detalle del usuario" (cerrar)="cerrarDetalle()">
+    @if (cargandoDetalle()) {
+    <p class="text-sm text-slate-500">Cargando...</p>
+    } @else if (errorDetalle()) {
+    <p class="text-sm text-red-600">{{ errorDetalle() }}</p>
+    } @else {
+    <app-modal-view-usuario [usuario]="usuarioSeleccionado()" />
+    }
+  </app-modal>
+
+  <app-modal [abierto]="formularioAbierto()" [titulo]="usuarioEnEdicion() ? 'Editar usuario' : 'Nuevo usuario'"
+    (cerrar)="cerrarFormulario()">
+    <app-formulario-usuario [usuario]="usuarioEnEdicion()" [cargando]="cargandoFormulario()" [error]="errorFormulario()"
+      (guardar)="guardarUsuario($event)" (cancelar)="cerrarFormulario()" />
+  </app-modal>
+</div>

@@ -1,0 +1,69 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (producto) {
+    <div>
+      <span class="mb-1 block text-sm font-medium text-slate-700">Código</span>
+      <p class="text-sm text-slate-500">{{ producto.codigo }}</p>
+    </div>
+  }
+
+  <div>
+    <label for="nombre" class="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
+    <input
+      id="nombre"
+      type="text"
+      formControlName="nombre"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+    />
+    @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
+      <p class="mt-1 text-xs text-red-600">El nombre es requerido.</p>
+    }
+  </div>
+
+  <div>
+    <label for="marca" class="mb-1 block text-sm font-medium text-slate-700">Marca</label>
+    <input
+      id="marca"
+      type="text"
+      formControlName="marca"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+    />
+    @if (form.controls.marca.invalid && form.controls.marca.touched) {
+      <p class="mt-1 text-xs text-red-600">La marca es requerida.</p>
+    }
+  </div>
+
+  <div>
+    <label for="precio" class="mb-1 block text-sm font-medium text-slate-700">Precio</label>
+    <input
+      id="precio"
+      type="text"
+      inputmode="decimal"
+      formControlName="precio"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+    />
+    @if (form.controls.precio.invalid && form.controls.precio.touched) {
+      <p class="mt-1 text-xs text-red-600">Precio requerido, máximo 3 dígitos enteros.</p>
+    }
+  </div>
+
+  @if (error) {
+    <p class="text-sm text-red-600">{{ error }}</p>
+  }
+
+  <div class="mt-2 flex justify-end gap-3">
+    <button
+      type="button"
+      (click)="cancelar.emit()"
+      class="rounded-md px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="cargando"
+      class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-60"
+    >
+      {{ cargando ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+</form>

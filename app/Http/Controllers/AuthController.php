@@ -32,6 +32,9 @@ class AuthController extends Controller
 
         $token = $usuario->createToken('api-token')->plainTextToken;
 
+        // Agregamos las secciones a las que tiene acceso el usuario, para que el frontend pueda mostrar/ocultar links según corresponda.
+        $usuario->setAttribute('secciones', $usuario->seccionesPermitidas()->pluck('nombre')->values());
+
         return response()->json([
             'usuario' => $usuario,
             'token' => $token,
@@ -47,7 +50,10 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        $usuario = $request->user();
+        $usuario->setAttribute('secciones', $usuario->seccionesPermitidas()->pluck('nombre')->values());
+
+        return response()->json($usuario);
     }
 
     public function recuperarPassword(RecuperarPasswordRequest $request)

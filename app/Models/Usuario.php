@@ -8,6 +8,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use MongoDB\Laravel\Eloquent\Model;
@@ -63,5 +64,21 @@ class Usuario extends Model implements AuthenticatableContract
     public function perfiles(): BelongsToMany
     {
         return $this->belongsToMany(Perfil::class, 'usuario_perfil', 'usuario_id', 'perfil_id');
+    }
+
+    /**
+     * Secciones a las que tiene acceso
+     */
+    public function seccionesPermitidas(): Collection
+    {
+        return $this->load('perfiles.secciones')
+            ->perfiles
+            ->flatMap(fn ($perfil) => $perfil->secciones)
+            ->unique('id');
+    }
+
+    public function tieneAcceso(string $seccion): bool
+    {
+        return $this->seccionesPermitidas()->contains('nombre', $seccion);
     }
 }

@@ -1,0 +1,63 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+  @if (perfil) {
+    <div>
+      <span class="mb-1 block text-sm font-medium text-slate-700">Código</span>
+      <p class="text-sm text-slate-500">{{ perfil.codigo }}</p>
+    </div>
+  }
+
+  <div>
+    <label for="nombre" class="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
+    <input
+      id="nombre"
+      type="text"
+      formControlName="nombre"
+      class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
+    />
+    @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
+      <p class="mt-1 text-xs text-red-600">El nombre es requerido.</p>
+    }
+  </div>
+
+  <div>
+    <span class="mb-2 block text-sm font-medium text-slate-700">Secciones a las que tendrá acceso</span>
+    @if (secciones.length === 0) {
+      <p class="text-sm text-slate-400">No hay secciones disponibles.</p>
+    } @else {
+      <div class="flex flex-col gap-2">
+        @for (seccion of secciones; track seccion.id) {
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              [checked]="seccionesSeleccionadas.has(seccion.id)"
+              (change)="toggleSeccion(seccion.id, $any($event.target).checked)"
+              class="rounded border-slate-300"
+            />
+            {{ seccion.nombre }}
+          </label>
+        }
+      </div>
+    }
+  </div>
+
+  @if (error) {
+    <p class="text-sm text-red-600">{{ error }}</p>
+  }
+
+  <div class="mt-2 flex justify-end gap-3">
+    <button
+      type="button"
+      (click)="cancelar.emit()"
+      class="rounded-md px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="cargando"
+      class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-60"
+    >
+      {{ cargando ? 'Guardando...' : 'Guardar' }}
+    </button>
+  </div>
+</form>

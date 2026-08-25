@@ -1,0 +1,30 @@
+<aside class="flex h-full w-64 flex-shrink-0 flex-col bg-slate-900 text-slate-100">
+  <div class="px-6 py-5">
+    <h1 class="text-lg font-semibold">Grupo TAP</h1>
+    <p class="text-xs text-slate-400">Examen Técnico</p>
+  </div>
+
+  <nav class="flex-1 space-y-1 px-3">
+    @for (item of navItems; track item.ruta) {
+      @if (mostrar(item)) {
+        <a
+          [routerLink]="item.ruta"
+          routerLinkActive="bg-slate-800 text-white"
+          class="block rounded-md px-3 py-2 text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+        >
+          {{ item.etiqueta }}
+        </a>
+      }
+    }
+  </nav>
+
+  <div class="border-t border-slate-800 px-3 py-4">
+    <button
+      type="button"
+      (click)="cerrarSesion()"
+      class="block w-full rounded-md px-3 py-2 text-left text-sm text-slate-300 transition hover:bg-slate-800 hover:text-white"
+    >
+      Cerrar sesión
+    </button>
+  </div>
+</aside>

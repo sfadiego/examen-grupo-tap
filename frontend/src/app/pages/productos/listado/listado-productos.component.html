@@ -1,0 +1,82 @@
+<div class="p-6">
+  <div class="mb-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-slate-800">Productos</h1>
+    <div class="flex items-center gap-2">
+      <button (click)="descargarPdf()" [disabled]="!!descargando()"
+        class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+        {{ descargando() === 'pdf' ? 'Descargando...' : 'Descargar PDF' }}
+      </button>
+      <button (click)="descargarExcel()" [disabled]="!!descargando()"
+        class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60">
+        {{ descargando() === 'excel' ? 'Descargando...' : 'Descargar Excel' }}
+      </button>
+      @if (authService.tieneAcceso('Alta de productos')) {
+      <button (click)="nuevoProducto()"
+        class="rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700">
+        Nuevo producto
+      </button>
+      }
+    </div>
+  </div>
+
+  @if (errorAccion()) {
+  <p class="mb-4 text-sm text-red-600">{{ errorAccion() }}</p>
+  }
+
+  @if (cargando()) {
+  <p class="text-sm text-slate-500">Cargando productos...</p>
+  } @else if (error()) {
+  <p class="text-sm text-red-600">{{ error() }}</p>
+  } @else if (productos().length === 0) {
+  <p class="text-sm text-slate-500">No hay productos registrados.</p>
+  } @else {
+  <div class="overflow-x-auto rounded-lg border border-slate-200">
+    <table class="min-w-full divide-y divide-slate-200 text-sm">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Código de producto</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Nombre</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Precio</th>
+          <th class="px-4 py-2 text-left font-medium text-slate-600">Fecha de creación</th>
+          <th class="px-4 py-2 text-right font-medium text-slate-600">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (producto of productos(); track producto.id) {
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-2 text-slate-700">{{ producto.codigo }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ producto.nombre }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ producto.precio | number: '1.0-2' }}</td>
+          <td class="px-4 py-2 text-slate-700">{{ producto.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td class="px-4 py-2 text-right">
+            @if (authService.tieneAcceso('Consulta de productos')) {
+            <button type="button" (click)="editar(producto)" class="mr-3 text-blue-600 transition hover:text-blue-800">
+              Editar
+            </button>
+            <button type="button" (click)="visualizar(producto)"
+              class="mr-3 text-slate-500 transition hover:text-slate-700">
+              Ver
+            </button>
+            <button type="button" (click)="eliminar(producto)" [disabled]="eliminandoId() === producto.id"
+              class="text-red-600 transition hover:text-red-800 disabled:opacity-60">
+              {{ eliminandoId() === producto.id ? 'Eliminando...' : 'Eliminar' }}
+            </button>
+            }
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <app-modal [abierto]="!!productoSeleccionado()" titulo="Detalle del producto" (cerrar)="cerrarModal()">
+    <app-modal-view [producto]="productoSeleccionado()" />
+  </app-modal>
+
+  <app-modal [abierto]="formularioAbierto()" [titulo]="productoEnEdicion() ? 'Editar producto' : 'Nuevo producto'"
+    (cerrar)="cerrarFormulario()">
+    <app-formulario-producto [producto]="productoEnEdicion()" [cargando]="cargandoFormulario()"
+      [error]="errorFormulario()" (guardar)="guardarProducto($event)" (cancelar)="cerrarFormulario()" />
+  </app-modal>
+</div>

@@ -2,6 +2,7 @@
 
 use App\Enums\SeccionEnum;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\SeccionController;
@@ -44,4 +45,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('secciones', [SeccionController::class, 'index']);
+    Route::get('bitacora', [BitacoraController::class, 'index']);
 });
